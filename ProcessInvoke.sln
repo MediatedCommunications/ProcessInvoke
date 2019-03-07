@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Tests", "ProcessInvoke.Tests\ProcessInvoke.Tests.csproj", "{84A914A7-21F4-44E9-A306-D32AC562D126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Core", "ProcessInvoke.Core\ProcessInvoke.Core.csproj", "{5D0A5D75-DA14-496D-97A9-562969C52720}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{27568C99-CAE5-489E-879F-21E2AA386C21}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Security.HighestAvailable", "ProcessInvoke.Security.HighestAvailable\ProcessInvoke.Security.HighestAvailable.csproj", "{625812F8-BEA9-4FF4-8212-18D0969D3828}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Security.CurrentUser", "ProcessInvoke.Security.CurrentUser\ProcessInvoke.Security.CurrentUser.csproj", "{0C36621A-1592-455D-9AF2-D135F843BBB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Security.Administrator", "ProcessInvoke.Security.Administrator\ProcessInvoke.Security.Administrator.csproj", "{0494A393-1606-46ED-BFF8-600702929D47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84A914A7-21F4-44E9-A306-D32AC562D126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84A914A7-21F4-44E9-A306-D32AC562D126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84A914A7-21F4-44E9-A306-D32AC562D126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84A914A7-21F4-44E9-A306-D32AC562D126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D0A5D75-DA14-496D-97A9-562969C52720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D0A5D75-DA14-496D-97A9-562969C52720}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D0A5D75-DA14-496D-97A9-562969C52720}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D0A5D75-DA14-496D-97A9-562969C52720}.Release|Any CPU.Build.0 = Release|Any CPU
+		{625812F8-BEA9-4FF4-8212-18D0969D3828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625812F8-BEA9-4FF4-8212-18D0969D3828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625812F8-BEA9-4FF4-8212-18D0969D3828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625812F8-BEA9-4FF4-8212-18D0969D3828}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C36621A-1592-455D-9AF2-D135F843BBB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C36621A-1592-455D-9AF2-D135F843BBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C36621A-1592-455D-9AF2-D135F843BBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C36621A-1592-455D-9AF2-D135F843BBB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0494A393-1606-46ED-BFF8-600702929D47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0494A393-1606-46ED-BFF8-600702929D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0494A393-1606-46ED-BFF8-600702929D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0494A393-1606-46ED-BFF8-600702929D47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B745BEA5-F19D-4023-8606-64D9BB869E7C}
+	EndGlobalSection
+EndGlobal
