@@ -29,7 +29,8 @@ namespace ProcessInvoke {
                 ListenOn_Host = $@"{Guid.NewGuid()}_{Guid.NewGuid()}",
                 ListenOn_Port = $@"{Guid.NewGuid()}_{Guid.NewGuid()}",
                 ParentProcess_ID = System.Diagnostics.Process.GetCurrentProcess().Id,
-                ParentProcess_WaitForExit = true,
+                Terminate_OnParentProcessExit = true,
+                Terminate_OnStop = true,
             };
 
             return ret;
@@ -37,8 +38,10 @@ namespace ProcessInvoke {
 
         protected virtual ProcessClientOptions DefaultClientOptions() {
             var ret = new ProcessClientOptions() {
-                OnDispose_Terminate = true,
-                OnConnect_TimeOut = TimeSpan.FromSeconds(5)
+                OnDispose_Stop = true,
+                OnDispose_Kill = true,
+                OnConnect_Attempts_TotalTimeOut = TimeSpan.FromSeconds(5),
+                OnConnect_Attempts_Minimum = 5,
             };
 
             return ret;

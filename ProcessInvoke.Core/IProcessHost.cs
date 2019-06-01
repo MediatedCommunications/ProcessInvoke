@@ -89,16 +89,18 @@ namespace ProcessInvoke {
 
             var Exception = default(Exception);
 
-            while(this.Proxy == null && SW.Elapsed < ClientOptions.OnConnect_TimeOut) {
+
+            for(var ConnectionAttempts = 0; SW.Elapsed < ClientOptions.OnConnect_Attempts_TotalTimeOut || ConnectionAttempts < ClientOptions.OnConnect_Attempts_Minimum; ConnectionAttempts += 1) { 
                 try {
                     var connection = new ZyanConnection(url, protocol);
                     this.Proxy = connection.CreateProxy<IProcessHost>();
+                    break;
                 } catch (Exception ex) {
                     Exception = ex;
                 }
-            }
+            } 
 
-            if(this.Proxy == null) {
+            if (this.Proxy == null) {
                 throw Exception;
             }
 
@@ -119,22 +121,27 @@ namespace ProcessInvoke {
         private bool __Disposed = false;
         public void Dispose() {
             if (!__Disposed) {
-                if (ClientOptions.OnDispose_Terminate) {
+                if (ClientOptions?.OnDispose_Stop == true) {
                     try {
                         Stop();
                     } catch(Exception ex) {
                         ex.Equals(ex);
                     }
+                }
 
+                if(ClientOptions?.OnDispose_Kill == true) {
                     try {
-                        if (!Process.HasExited) {
+                        if (Process?.HasExited == false) {
                             Process.Kill();
                         }
                     } catch (Exception ex) {
                         ex.Equals(ex);
                     }
-
                 }
+
+
+                GC.SuppressFinalize(this);
+
             }
             __Disposed = true;
         }

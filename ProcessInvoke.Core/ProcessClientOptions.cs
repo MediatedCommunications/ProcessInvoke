@@ -6,14 +6,18 @@ using System.Text;
 namespace ProcessInvoke {
 
     public class ProcessClientOptions {
-        public bool OnDispose_Terminate { get; set; }
+        public bool OnDispose_Stop { get; set; }
+        public bool OnDispose_Kill { get; set; }
 
-        public TimeSpan OnConnect_TimeOut { get; set; }
+        public TimeSpan OnConnect_Attempts_TotalTimeOut { get; set; }
+        public long OnConnect_Attempts_Minimum { get; set; }
 
         public virtual ProcessClientOptions Clone() {
             var ret = new ProcessClientOptions() {
-                OnDispose_Terminate = this.OnDispose_Terminate,
-                OnConnect_TimeOut = this.OnConnect_TimeOut,
+                OnDispose_Stop = this.OnDispose_Stop,
+                OnDispose_Kill = this.OnDispose_Kill,
+                OnConnect_Attempts_TotalTimeOut = this.OnConnect_Attempts_TotalTimeOut,
+                OnConnect_Attempts_Minimum = this.OnConnect_Attempts_Minimum
             };
 
             return ret;
@@ -26,9 +30,8 @@ namespace ProcessInvoke {
         public string ListenOn_Port { get; set; }
 
         public int? ParentProcess_ID { get; set; }
-        public bool ParentProcess_WaitForExit { get; set; }
-
-        
+        public bool Terminate_OnParentProcessExit { get; set; }
+        public bool Terminate_OnStop { get; set; }
 
         public virtual ProcessServerOptions Clone() {
             var ret = new ProcessServerOptions() {
@@ -37,7 +40,8 @@ namespace ProcessInvoke {
 
                 ParentProcess_ID = ParentProcess_ID,
 
-                ParentProcess_WaitForExit = ParentProcess_WaitForExit,
+                Terminate_OnParentProcessExit = Terminate_OnParentProcessExit,
+                Terminate_OnStop = Terminate_OnStop,
             };
 
             return ret;
@@ -48,17 +52,18 @@ namespace ProcessInvoke {
             return true
                 && !string.IsNullOrEmpty(ListenOn_Host)
                 && !string.IsNullOrEmpty(ListenOn_Port)
-                && ((ParentProcess_WaitForExit && ParentProcess_ID != null) || (!ParentProcess_WaitForExit))
+                && ((Terminate_OnParentProcessExit && ParentProcess_ID != null) || (!Terminate_OnParentProcessExit))
                 ;
         }
 
         public override string ToString() {
             
-            var args = new Dictionary<String, String>() {
+            var args = new SortedDictionary<String, String>() {
                 {nameof(ListenOn_Host), ListenOn_Host },
                 {nameof(ListenOn_Port), ListenOn_Port },
                 {nameof(ParentProcess_ID), ParentProcess_ID?.ToString() },
-                {nameof(ParentProcess_WaitForExit), ParentProcess_WaitForExit.ToString() },
+                {nameof(Terminate_OnParentProcessExit), Terminate_OnParentProcessExit.ToString() },
+                {nameof(Terminate_OnStop), Terminate_OnStop.ToString() },
             };
 
             var Elements = (
@@ -85,7 +90,8 @@ namespace ProcessInvoke {
                 "Is",
                 "Another",
                 { $@"{nameof(ParentProcess_ID)}=", "the process ID of the parent process", (int x)=> ret.ParentProcess_ID = x },
-                { $@"{nameof(ParentProcess_WaitForExit)}=", "if true, will wait for the parent process to exit", (bool x)=> ret.ParentProcess_WaitForExit = x },
+                { $@"{nameof(Terminate_OnParentProcessExit)}=", "if true, will exit when the parent process exits", (bool x)=> ret.Terminate_OnParentProcessExit = x },
+                { $@"{nameof(Terminate_OnStop)}=", "if true, will exit when 'Stop' is invoked", (bool x)=> ret.Terminate_OnParentProcessExit = x },
                 { $@"{nameof(ListenOn_Host)}=", "the host to listen on", (string x)=> ret.ListenOn_Host = x },
                 { $@"{nameof(ListenOn_Port)}=", "the port to listen on", (string x)=> ret.ListenOn_Port = x }
             };

@@ -39,19 +39,22 @@ namespace ProcessInvoke {
             try {
                 if (Host != null) {
 
-                    if (ProcessOptions.ParentProcess_WaitForExit && ProcessOptions.ParentProcess_ID is int ProcessID) {
-                        try {
-                            var Parent = System.Diagnostics.Process.GetProcessById(ProcessID);
-                            Parent?.WaitForExit();
+                    var Delays = new LinkedList<Task>();
 
-                        } catch (Exception ex) {
-                            ex.Equals(ex);
-                        }
-                    } else {
-                        await Task.Delay(Timeout.InfiniteTimeSpan, Host.StartToken)
-                            .ConfigureAwait(false)
-                            ;
+                    var AddAll = !(ProcessOptions.Terminate_OnStop || ProcessOptions.Terminate_OnParentProcessExit);
+
+                    if(AddAll || ProcessOptions.Terminate_OnStop) {
+                        Delays.AddLast(DelayTask_Stop(Host.StartToken));
                     }
+
+                    if((AddAll || ProcessOptions.Terminate_OnParentProcessExit) && ProcessOptions.ParentProcess_ID is int ProcessID) {
+                        Delays.AddLast(DelayTask_ParentProcess(ProcessID));
+                    }
+
+                    await Task.WhenAny(Delays)
+                        .ConfigureAwait(false)
+                        ;
+
                 }
             } catch(Exception ex) {
                 ex.Equals(ex);
@@ -62,7 +65,41 @@ namespace ProcessInvoke {
             return ret;
         }
 
+
+        static Task DelayTask_Stop(CancellationToken Token) {
+            var ret = Task.Run(async() => {
+
+                try {
+                    await Task.Delay(Timeout.InfiniteTimeSpan, Token)
+                        .ConfigureAwait(false)
+                        ;
+                } catch {
+
+                }
+            });
+
+            return ret;
+        }
+
+        static Task DelayTask_ParentProcess(int ProcessId) {
+            var ret = Task.Run(() => {
+                try {
+                    var Parent = System.Diagnostics.Process.GetProcessById(ProcessId);
+                    Parent?.WaitForExit();
+
+
+                } catch (Exception ex) {
+                    ex.Equals(ex);
+                }
+            });
+
+
+            return ret;
+        }
+
     }
+
+    
 
     
 
