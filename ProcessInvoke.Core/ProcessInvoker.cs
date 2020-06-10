@@ -47,20 +47,20 @@ namespace ProcessInvoke {
             return ret;
         }
 
-        public IProcessHost TryStart() {
+        public ProcessClient TryStart() {
             return TryStart(null, null);
         }
 
-        public IProcessHost TryStart(ProcessServerOptions ServerOptions, ProcessClientOptions ClientOptions) {
+        public ProcessClient TryStart(ProcessServerOptions ServerOptions, ProcessClientOptions ClientOptions) {
             TryStart(ServerOptions, ClientOptions, out var ret);
             return ret;
         }
 
-        public bool TryStart(out IProcessHost Host) {
+        public bool TryStart(out ProcessClient Host) {
             return TryStart(null, null, out Host);
         }
 
-        public bool TryStart(ProcessServerOptions ServerOptions, ProcessClientOptions ClientOptions, out IProcessHost Host) {
+        public bool TryStart(ProcessServerOptions ServerOptions, ProcessClientOptions ClientOptions, out ProcessClient Host) {
             var ret = false;
             Host = null;
             try {
@@ -72,11 +72,11 @@ namespace ProcessInvoke {
             return ret;
         }
 
-        public IProcessHost Start() {
+        public ProcessClient Start() {
             return Start(null, null);
         }
 
-        public IProcessHost Start(ProcessServerOptions ServerOptions, ProcessClientOptions ClientOptions) {
+        public ProcessClient Start(ProcessServerOptions ServerOptions, ProcessClientOptions ClientOptions) {
             ServerOptions = ServerOptions ?? DefaultServerOptions();
             ServerOptions = ServerOptions.Clone();
 

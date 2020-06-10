@@ -22,7 +22,8 @@ namespace ProcessInvoke.Tests {
         private void TestInvoke(ProcessInvoker Invoker) {
             var Host = Invoker.TryStart();
 
-            var Service = Host.Register<IRemoteObject, RemoteObject>();
+            var Connection = Host.GetConnection();
+            var Service = Connection.Register<IRemoteObject, RemoteObject>();
 
             var MyProcessID = System.Diagnostics.Process.GetCurrentProcess().Id;
             var RemoteProcessID = Service.HostingProcessId();
