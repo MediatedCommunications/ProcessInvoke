@@ -1,33 +1,34 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using System;
+using System.Threading.Tasks;
+
 
 namespace ProcessInvoke.Tests {
-    [TestClass]
+    [TestFixture]
     public class UnitTest1 {
-        [TestMethod]
-        public void CurrentUser() {
-            TestInvoke(CurrentUserProcessInvoker.Instance);
+        [Test]
+        public Task CurrentUser() {
+            return TestInvoke(CurrentUserHostingFactory.Instance);
         }
 
-        [TestMethod]
-        public void HighestAvailable() {
-            TestInvoke(HighestAvailableProcessInvoker.Instance);
+        [Test]
+        public Task HighestAvailable() {
+            return TestInvoke(HighestAvailableHostingFactory.Instance);
         }
 
-        [TestMethod]
-        public void AdministratorUser() {
-            TestInvoke(AdministratorProcessInvoker.Instance);
+        [Test]
+        public Task AdministratorUser() {
+            return TestInvoke(AdministratorHostingFactory.Instance);
         }
 
-        private void TestInvoke(ProcessInvoker Invoker) {
-            var Host = Invoker.TryStart();
+        private async Task TestInvoke(HostingFactory Invoker) {
+            var Host = await Invoker.StartAsync();
 
-            var Connection = Host.GetConnection();
-            var Service = Connection.Register<IRemoteObject, RemoteObject>();
+            var RemoteObject = await Host.HostAsync<IRemoteObject, RemoteObject>();
+            var RemoteProcessID = await RemoteObject.HostingProcessId();
 
             var MyProcessID = System.Diagnostics.Process.GetCurrentProcess().Id;
-            var RemoteProcessID = Service.HostingProcessId();
-
+            
             Assert.AreNotEqual(MyProcessID, RemoteProcessID);
 
         }
@@ -36,12 +37,14 @@ namespace ProcessInvoke.Tests {
 
 
     public interface IRemoteObject {
-        int HostingProcessId();
+        Task<int> HostingProcessId();
     }
 
     public class RemoteObject : MarshalByRefObject, IRemoteObject {
-        public int HostingProcessId() {
-            return System.Diagnostics.Process.GetCurrentProcess().Id;
+        public Task<int> HostingProcessId() {
+            var ret = System.Diagnostics.Process.GetCurrentProcess().Id;
+
+            return Task.FromResult(ret);
         }
     }
 

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ProcessInvoke.Security.Administrator {
-    public static class Program {
+    static class Program {
         public static Task<int> Main(string[] args) {
-            return ProcessInvoke.Program.Main(args);
+            return ProcessInvoke.Program.MainAsync(args);
         }
     }
 }
