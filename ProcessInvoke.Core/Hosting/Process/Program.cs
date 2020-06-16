@@ -1,10 +1,9 @@
-﻿using ProcessInvoke.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke {
+namespace ProcessInvoke.Hosting.Process {
     public static class Program {
 
         public static async Task<int> MainAsync(string[] args) {
@@ -14,7 +13,9 @@ namespace ProcessInvoke {
             if (!Options.Valid()) {
                 OptionsSet.WriteOptionDescriptions(System.Console.Out);
             } else {
-                ret = await MainAsync(Options);
+                ret = await MainAsync(Options)
+                    .DefaultAwait()
+                    ;
             }
 
             return ret;
@@ -26,7 +27,9 @@ namespace ProcessInvoke {
             try {
                 Host = new RootObjectHost(ProcessOptions);
 
-                await Host.StartHostingAsync();
+                await Host.StartHostingAsync()
+                    .DefaultAwait()
+                    ;
 
 
                 ret = 0;
@@ -50,7 +53,7 @@ namespace ProcessInvoke {
                     }
 
                     await Task.WhenAny(Delays)
-                        .ConfigureAwait(false)
+                        .DefaultAwait()
                         ;
 
                 }
@@ -74,7 +77,7 @@ namespace ProcessInvoke {
 
                 try {
                     await Task.Delay(Timeout.InfiniteTimeSpan, CTS.Token)
-                        .ConfigureAwait(false)
+                        .DefaultAwait()
                         ;
                 } catch {
 

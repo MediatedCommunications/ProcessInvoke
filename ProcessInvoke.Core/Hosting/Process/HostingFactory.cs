@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProcessInvoke.Protocols;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Pipes;
@@ -6,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke {
+namespace ProcessInvoke.Hosting.Process {
     public abstract class HostingFactory {
 
         protected virtual Assembly AssemblyToLaunch() {
@@ -31,7 +32,7 @@ namespace ProcessInvoke {
             return ret;
         }
 
-        protected virtual Process StartProcess(ProcessHostOptions Options) {
+        protected virtual System.Diagnostics.Process StartProcess(ProcessHostOptions Options) {
             var FN = FileNameToLaunch();
 
             var PSI = new System.Diagnostics.ProcessStartInfo() {
@@ -84,7 +85,9 @@ namespace ProcessInvoke {
             var Process = StartProcess(ServerOptions);
 
             var Provider = ProtocolProvider.GetProvider(ServerOptions.ListenOn_Provider);
-            var ret = await Provider.ConnectAsync<IRootObjectHost>(ServerOptions.ToEndpoint(), ClientOptions);
+            var ret = await Provider.ConnectAsync<IRootObjectHost>(ServerOptions.ToEndpoint(), ClientOptions)
+                .DefaultAwait()
+                ;
 
             return ret;
         }

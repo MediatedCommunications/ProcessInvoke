@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using ProcessInvoke.Hosting.Process;
+using System.Reflection;
 
 namespace ProcessInvoke {
     public class HighestAvailableHostingFactory : HostingFactory {

@@ -1,8 +1,8 @@
-﻿namespace ProcessInvoke.Core {
-    public class ObjectHost : ObjectHostBase {
+﻿namespace ProcessInvoke.Hosting.Object {
+    public class ObjectHost : HostBase {
         public object Handler { get; protected set; }
 
-        public ObjectHost(HostedObjectEndpoint Options, object Handler) : base(Options) {
+        public ObjectHost(Endpoint Options, object Handler) : base(Options) {
             this.Handler = Handler;
         }
 

@@ -1,25 +1,28 @@
-﻿using System;
+﻿using ProcessInvoke.Hosting.Object;
+using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke.Core {
-    public class RootObjectHost : ObjectHostBase, IRootObjectHost {
+namespace ProcessInvoke.Hosting.Process {
+    public class RootObjectHost : HostBase, IRootObjectHost {
         protected ProcessHostOptions ProcessOptions { get; private set; }
 
         public RootObjectHost(ProcessHostOptions ProcessOptions) : base(ProcessOptions.ToEndpoint()) {
             this.ProcessOptions = ProcessOptions;
         }
 
-        public async Task<HostedObjectEndpoint?> CloneEndpointAsync() {
-            var ret = default(HostedObjectEndpoint);
+        public async Task<Endpoint?> CloneEndpointAsync() {
+            var ret = default(Endpoint);
 
             var Options = ProcessOptions.Clone();
             Options.ListenOn_Key = Guid.NewGuid().ToString();
 
 
-            var tret = await CurrentProcessProcessHost.Instance.StartAsync(Options);
+            var tret = await CurrentProcessProcessHost.Instance.StartAsync(Options)
+                .DefaultAwait()
+                ;
             if(tret is { }) {
                 ret = Options.ToEndpoint();
             }
@@ -29,14 +32,14 @@ namespace ProcessInvoke.Core {
         }
 
 
-        protected ConcurrentDictionary<Type, ObjectHostBase> FactoryCache { get; set; } = new ConcurrentDictionary<Type, ObjectHostBase>();
-        protected ConcurrentDictionary<Type, HostedObjectEndpoint> EndpointCache { get; set; } = new ConcurrentDictionary<Type, HostedObjectEndpoint>();
+        protected ConcurrentDictionary<Type, HostBase> FactoryCache { get; set; } = new ConcurrentDictionary<Type, HostBase>();
+        protected ConcurrentDictionary<Type, Endpoint> EndpointCache { get; set; } = new ConcurrentDictionary<Type, Endpoint>();
 
-        public async Task<HostedObjectEndpoint?> HostEndpointAsync(Type Key) {
-            var ret = default(HostedObjectEndpoint);
+        public async Task<Endpoint?> HostEndpointAsync(Type Key) {
+            var ret = default(Endpoint);
             
             if (!FactoryCache.ContainsKey(Key)) {
-                var ChildOptions = new HostedObjectEndpoint(
+                var ChildOptions = new Endpoint(
                     Options.Provider,
                     Options.Host,
                     Options.Port,
@@ -47,7 +50,9 @@ namespace ProcessInvoke.Core {
 
                 if(Handler is { } V1) {
                     var NewProvider = new ObjectHost(ChildOptions, V1);
-                    var HostingLocation = await NewProvider.StartHostingAsync();
+                    var HostingLocation = await NewProvider.StartHostingAsync()
+                        .DefaultAwait()
+                        ;
 
                     FactoryCache[Key] = NewProvider;
                     EndpointCache[Key] = HostingLocation;

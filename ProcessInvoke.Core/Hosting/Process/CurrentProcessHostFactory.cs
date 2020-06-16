@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke {
+namespace ProcessInvoke.Hosting.Process {
     class CurrentProcessProcessHost : HostingFactory {
 
         public static CurrentProcessProcessHost Instance { get; private set; } = new CurrentProcessProcessHost();

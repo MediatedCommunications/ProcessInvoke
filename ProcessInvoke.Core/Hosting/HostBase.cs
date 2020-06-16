@@ -1,4 +1,5 @@
-﻿using StreamJsonRpc;
+﻿using ProcessInvoke.Protocols;
+using StreamJsonRpc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,12 +9,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke.Core {
-    public abstract class ObjectHostBase {
-        protected HostedObjectEndpoint Options { get; private set; }
+namespace ProcessInvoke.Hosting {
+    public abstract class HostBase {
+        protected Endpoint Options { get; private set; }
         protected CancellationTokenSource? Source { get; private set; }
 
-        public ObjectHostBase(HostedObjectEndpoint Options) {
+        public HostBase(Endpoint Options) {
             this.Options = Options;
         }
 
@@ -28,13 +29,13 @@ namespace ProcessInvoke.Core {
             return Task.CompletedTask;
         }
 
-        public Task<HostedObjectEndpoint> StartHostingAsync() {
+        public Task<Endpoint> StartHostingAsync() {
             if(Source != default) {
                 throw new InvalidOperationException("Hosting the object has already started");
             }
             Source = new CancellationTokenSource();
 
-            var ret = new HostedObjectEndpoint(
+            var ret = new Endpoint(
                 Options.Provider,
                 Options.Host,
                 Options.Port,
@@ -47,11 +48,13 @@ namespace ProcessInvoke.Core {
             return Task.FromResult(ret);
         }
 
-        protected async Task StartListeningAsync(HostedObjectEndpoint EP) {
+        protected async Task StartListeningAsync(Endpoint EP) {
             var P = ProtocolProvider.GetProvider(EP.Provider);
 
             if(P is { } Provider && Source?.Token is { } Token) {
-                await Provider.StartListeningAsync(EP, Token, GetHandler);
+                await Provider.StartListeningAsync(EP, Token, GetHandler)
+                    .DefaultAwait()
+                    ;
             }
 
             

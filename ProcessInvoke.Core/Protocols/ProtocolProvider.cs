@@ -1,22 +1,15 @@
-﻿using System;
+﻿using ProcessInvoke.Hosting;
+using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke {
-
-    public interface IProtocolProvider {
-        Task<T> ConnectAsync<T>(HostedObjectEndpoint Endpoint, ProcessClientOptions? Options = default) where T : class;
-
-        Task StartListeningAsync(HostedObjectEndpoint Endpoint, CancellationToken Token, Func<Object> GetHandler);
-
-    }
+namespace ProcessInvoke.Protocols {
 
     public static class ProtocolProvider {
-        public static string Default { get; private set; } = typeof(Providers.NamedPipes.NamedPipeProtocolProvider).AssemblyQualifiedName;
+        public static string Default { get; private set; } = typeof(Protocols.NamedPipes.NamedPipeProtocolProvider).AssemblyQualifiedName;
 
         public static IProtocolProvider? GetProvider(string? ProviderName) {
             var NewProviderName = Default;
@@ -41,12 +34,14 @@ namespace ProcessInvoke {
             return ret;
         }
 
-        public static async Task<T?> TryConnectAsync<T>(HostedObjectEndpoint? Endpoint, ProcessClientOptions? Options = default) where T : class {
+        public static async Task<T?> TryConnectAsync<T>(Endpoint? Endpoint, ProcessClientOptions? Options = default) where T : class {
             var ret = default(T);
 
             if (Endpoint is { } V1 && TryGetProvider(Endpoint?.Provider) is { } V2) {
                 try {
-                    ret = await V2.ConnectAsync<T>(V1, Options);
+                    ret = await V2.ConnectAsync<T>(V1, Options)
+                        .DefaultAwait()
+                        ;
                 } catch {
 
                 }

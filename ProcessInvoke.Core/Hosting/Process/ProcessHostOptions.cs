@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ProcessInvoke {
+namespace ProcessInvoke.Hosting.Process {
     public class ProcessHostOptions {
         public string ListenOn_Provider { get; set; } = string.Empty;
         public string ListenOn_Host { get; set; } = string.Empty;
@@ -14,8 +14,8 @@ namespace ProcessInvoke {
         public bool Terminate_OnParentProcessExit { get; set; }
         public bool Terminate_OnStop { get; set; }
 
-        public HostedObjectEndpoint ToEndpoint() {
-            return new HostedObjectEndpoint(
+        public Endpoint ToEndpoint() {
+            return new Endpoint(
                 ListenOn_Provider,
                 ListenOn_Host,
                 ListenOn_Port,
