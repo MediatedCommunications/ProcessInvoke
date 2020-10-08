@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,14 +21,11 @@ namespace ProcessInvoke.Server.OutOfProcess.Restartable {
         }
 
         private async Task<T> InvokeAsync<T>(Func<IOutOfProcessController, Task<T>> Action) {
-            var ret = default(T);
 
-            var Retry = false;
-            var Success = false;
+            var Retry = true;
             var Failures = 0;
-            
 
-            do {
+            while(Retry) {
                 if (Instance == default) {
                     try {
                         Instance = await Factory.StartAsync(ServerOptions, ClientOptions)
@@ -36,25 +34,30 @@ namespace ProcessInvoke.Server.OutOfProcess.Restartable {
                     } catch (Exception ex) {
                         ex.Ignore();
 
-                        throw new Exception("Unable to restart host");
+                        throw new Exception("Unable to restart host", ex);
                     }
                 }
                 try {
-                    ret = await Action(Instance)
+                    var ret = await Action(Instance)
                         .DefaultAwait()
                         ;
-                    Retry = false;
-                    Success = true;
+                    return ret;
                 } catch (Exception ex) {
                     ex.Ignore();
 
                     Instance = default;
                     Retry = true;
                     Failures += 1;
-                }
-            } while (Retry == true && Failures <= 1);
 
-            return ret;
+                    if(Failures >= 5) {
+                        throw new Exception("Error invoking Host", ex);
+                    }
+
+                }
+            }
+
+            //This should actually never happen.
+            throw new Exception("Host not invoked");
         }
 
         private Task InvokeAsync(Func<IOutOfProcessController, Task> Action) {

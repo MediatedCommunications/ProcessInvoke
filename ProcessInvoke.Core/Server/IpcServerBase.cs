@@ -24,7 +24,7 @@ namespace ProcessInvoke.Server {
             Source?.Cancel();
             Source = default;
 
-            Stopped?.Invoke(this, default);
+            Stopped?.Invoke(this, EventArgs.Empty);
 
             return Task.CompletedTask;
         }

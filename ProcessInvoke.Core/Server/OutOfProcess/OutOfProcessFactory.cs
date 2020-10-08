@@ -37,7 +37,7 @@ namespace ProcessInvoke.Server.OutOfProcess {
             return ret;
         }
 
-        protected virtual System.Diagnostics.Process StartProcess(OutOfProcessServerOptions Options) {
+        protected virtual Task StartHostAsync(OutOfProcessServerOptions Options) {
             var FN = FileNameToLaunch();
 
             var PSI = new System.Diagnostics.ProcessStartInfo() {
@@ -48,7 +48,7 @@ namespace ProcessInvoke.Server.OutOfProcess {
 
             var Proc = System.Diagnostics.Process.Start(PSI);
 
-            return Proc;
+            return Task.CompletedTask;
         }
 
         protected virtual OutOfProcessServerOptions DefaultServerOptions() {
@@ -86,7 +86,9 @@ namespace ProcessInvoke.Server.OutOfProcess {
                 ServerOptions.ParentProcess_ID = System.Diagnostics.Process.GetCurrentProcess().Id;
             }
 
-            var Process = StartProcess(ServerOptions);
+            await StartHostAsync(ServerOptions)
+                .DefaultAwait()
+                ;
 
             var Provider = ProtocolProvider.GetProvider(ServerOptions.ListenOn_Provider);
             var ret = await Provider.ConnectAsync<IOutOfProcessController>(ServerOptions.ToEndpoint(), ClientOptions)

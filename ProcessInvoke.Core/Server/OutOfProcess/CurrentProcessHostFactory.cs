@@ -11,7 +11,13 @@ namespace ProcessInvoke.Server.OutOfProcess {
         public static CurrentProcessProcessHost Instance { get; private set; } = new CurrentProcessProcessHost();
 
         protected override Assembly AssemblyToLaunch() {
-            return System.Reflection.Assembly.GetEntryAssembly();
+            var ret = System.Reflection.Assembly.GetEntryAssembly();
+
+            if(ret == default) {
+                throw new NullReferenceException("Entry Assembly is Null");
+            }
+
+            return ret;
         }
 
 

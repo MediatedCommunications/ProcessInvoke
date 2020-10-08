@@ -22,6 +22,8 @@ namespace ProcessInvoke.Server.OutOfProcess {
         }
 
         public virtual async Task<int> MainAsync(string[] args) {
+            LocalPathAssemblyResolver.Instance.Enabled = true;
+            
             var ret = -1;
 
             var Options = ParseOptions(args, out var OptionsSet);

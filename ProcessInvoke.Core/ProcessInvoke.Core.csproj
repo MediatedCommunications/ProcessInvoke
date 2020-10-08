@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\Shared\Shared.targets" Label="Shared" />
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+	    <TargetFramework>net50-windows</TargetFramework>
+	</PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="StreamJsonRpc" Version="2.6.99-rc" />

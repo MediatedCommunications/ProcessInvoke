@@ -2,7 +2,7 @@
   "profiles": {
     "ProcessInvoke.Security.CurrentUser": {
       "commandName": "Project",
-      "commandLineArgs": "--ListenOn_Host=\"38c64d73-6e03-49d2-9d7e-fff4f7d2495b\" --ListenOn_Key=\"5b44de52-a56e-49f5-9903-a7773483866f\" --ListenOn_Port=\"40afd67d-bbe1-453c-abab-283c8e971d9a\" --ListenOn_Provider=\"ProcessInvoke.Protocols.NamedPipes.NamedPipeProtocolProvider, ProcessInvoke.Core, Version=20.6.17.0, Culture=neutral, PublicKeyToken=null\" --ParentProcess_ID=\"6644\" --Terminate_OnParentProcessExit=\"False\" --Terminate_OnStop=\"True\""
+      "commandLineArgs": "--ListenOn_Host=\"a001d0a8-c3af-4fe4-b8bb-0c940cf93ed6\" --ListenOn_Key=\"2a3602a7-bb1b-4aa7-96c2-c55b72090891\" --ListenOn_Port=\"e80bec1f-7228-4568-971a-161affa0fe51\" --ListenOn_Provider=\"ProcessInvoke.Protocols.NamedPipes.NamedPipeProtocolProvider, ProcessInvoke.Core, Version=20.6.17.0, Culture=neutral, PublicKeyToken=null\" --ParentProcess_ID=\"10644\" --Terminate_OnParentProcessExit=\"False\" --Terminate_OnStop=\"True\""
     }
   }
 }

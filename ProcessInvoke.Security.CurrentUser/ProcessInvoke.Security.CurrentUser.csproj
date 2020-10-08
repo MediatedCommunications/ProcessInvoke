@@ -3,11 +3,11 @@
   
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+	<!-- No Manifest -->
   </PropertyGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\ProcessInvoke.Core\ProcessInvoke.Core.csproj" />
   </ItemGroup>
-
 
 </Project>

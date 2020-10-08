@@ -51,8 +51,8 @@ namespace ProcessInvoke.Server.OutOfProcess {
                 ;
         }
 
-        public override string ToString() {
-
+        public IDictionary<string, string> ToDictionary()
+        {
             var args = new SortedDictionary<String, String>() {
                 {nameof(ListenOn_Provider), ListenOn_Provider },
                 {nameof(ListenOn_Host), ListenOn_Host },
@@ -63,12 +63,24 @@ namespace ProcessInvoke.Server.OutOfProcess {
                 {nameof(Terminate_OnStop), Terminate_OnStop.ToString() },
             };
 
+            return args;
+        }
+
+        public List<String> ToList()
+        {
+            var args = ToDictionary();
             var Elements = (
                 from item in args
                 where !string.IsNullOrEmpty(item.Value)
                 let value = $@"--{item.Key}=""{item.Value}"""
                 select value
                 ).ToList();
+
+            return Elements;
+        }
+
+        public override string ToString() {
+            var Elements = ToList();
 
             var ret = string.Join(" ", Elements);
 

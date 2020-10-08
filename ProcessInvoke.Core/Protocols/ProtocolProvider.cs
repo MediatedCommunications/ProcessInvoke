@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ProcessInvoke.Protocols {
 
     public static class ProtocolProvider {
-        public static string Default { get; private set; } = typeof(Protocols.NamedPipes.NamedPipeProtocolProvider).AssemblyQualifiedName;
+        public static string Default { get; private set; } = typeof(Protocols.NamedPipes.NamedPipeProtocolProvider).AssemblyQualifiedName ?? string.Empty;
 
         public static IProtocolProvider GetProvider(string? ProviderName) {
             var ret = TryGetProvider(ProviderName);
@@ -21,13 +21,16 @@ namespace ProcessInvoke.Protocols {
         }
 
         public static IProtocolProvider? TryGetProvider(string? ProviderName) {
+            var ret = default(IProtocolProvider?);
+            
             var NewProviderName = Default;
             if (!string.IsNullOrWhiteSpace(ProviderName)) {
                 NewProviderName = ProviderName;
             }
 
-            var T = Type.GetType(NewProviderName);
-            var ret = Activator.CreateInstance(T) as IProtocolProvider;
+            if (Type.GetType(NewProviderName) is { } T) {
+                ret = Activator.CreateInstance(T) as IProtocolProvider;
+            }
 
             return ret;
         }

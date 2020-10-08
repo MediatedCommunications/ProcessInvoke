@@ -5,6 +5,9 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 using ProcessInvoke.Server;
+using ProcessInvoke.Server.OutOfProcess;
+using System.Diagnostics;
+using System.Linq;
 
 namespace ProcessInvoke.Tests {
 
@@ -27,7 +30,40 @@ namespace ProcessInvoke.Tests {
 
         }
 
+        [Test]
+        public async Task TestInProcessFactoryAsync()
+        {
+            var Type = typeof(RemoteObject).AssemblyQualifiedName;
 
+
+            var Host = await InProcessFactory.Instance.StartAsync();
+
+            var RemoteObject = await Host.HostAsync<IRemoteObject, RemoteObject>();
+            var RemoteProcessID = await RemoteObject.HostingProcessIdAsync();
+
+            var MyProcessID = System.Diagnostics.Process.GetCurrentProcess().Id;
+
+            Assert.AreEqual(MyProcessID, RemoteProcessID);
+
+
+
+        }
+
+
+    }
+
+    public class InProcessFactory : OutOfProcessFactory
+    {
+        public static InProcessFactory Instance { get; private set; } = new InProcessFactory();
+
+        protected override Task StartHostAsync(OutOfProcessServerOptions Options)
+        {
+            var args = Options.ToList().Select(x => x.Replace($@"""", "")).ToArray();
+
+            _ = Task.Run(() => ProcessInvoke.Server.OutOfProcess.Program.Default.MainAsync(args));
+
+            return Task.CompletedTask;
+        }
     }
 
 }
