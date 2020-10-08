@@ -24,6 +24,13 @@ namespace ProcessInvoke.Server.OutOfProcess {
         public static async Task<TInterface?> HostAsync<TInterface, TImplementation>(this IOutOfProcessController This) where TImplementation : TInterface where TInterface : class {
             var Key = typeof(TImplementation);
 
+
+            try
+            {
+                //var Data = (This as StreamJsonRpc.IJsonRpcClientProxy).JsonRpc.InvokeAsync()
+            }
+            catch { }
+
             var EP = await This.HostEndpointAsync(Key)
                 .DefaultAwait()
                 ;

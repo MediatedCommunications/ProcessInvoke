@@ -13,12 +13,40 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net50-windows</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DebugType>full</DebugType>
     <OutputPath>bin\</OutputPath>
     <LangVersion>latest</LangVersion>
     <nullable>enable</nullable>
   </PropertyGroup>
+
+
+	<!--
+This is a workaround.
+ISSUE:		https://github.com/dotnet/runtime/issues/43168
+Solution:	https://github.com/AaronRobinsonMSFT/DNNE/pull/38/commits/5168b74a1e476d2d0ff4a6946cd61b5b51ed7cea
+
+-->
+	<PropertyGroup>
+		<DnneWorkAroundSdk1675>true</DnneWorkAroundSdk1675>
+	</PropertyGroup>
+
+
+	<Target Name="DnneAddRuntimeDependenciesToContent"
+	  BeforeTargets="GetCopyToOutputDirectoryItems"
+	  DependsOnTargets="GenerateBuildDependencyFile;GenerateBuildRuntimeConfigurationFiles"
+	  Condition="'$(DnneWorkAroundSdk1675)' == 'true'">
+		<ItemGroup>
+			<ContentWithTargetPath Include="$(ProjectDepsFilePath)"
+								  Condition="'$(GenerateDependencyFile)' == 'true'"
+								  CopyToOutputDirectory="PreserveNewest"
+								  TargetPath="$(ProjectDepsFileName)" />
+			<ContentWithTargetPath Include="$(ProjectRuntimeConfigFilePath)"
+								  Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'"
+								  CopyToOutputDirectory="PreserveNewest"
+								  TargetPath="$(ProjectRuntimeConfigFileName)" />
+		</ItemGroup>
+	</Target>
   
 </Project>

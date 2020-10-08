@@ -14,12 +14,13 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net50</TargetFramework>
     <LangVersion>latest</LangVersion>
     <OutputPath>bin\</OutputPath>
     <DebugType>full</DebugType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  
+
+
 </Project>

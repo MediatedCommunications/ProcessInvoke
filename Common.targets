@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>ProcessInvoke</RootNamespace>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>ProcessInvoke</AssemblyTitle>
     <Product>ProcessInvoke</Product>
-    <Copyright>Copyright © 2020</Copyright>
+    <Copyright>Copyright Â© 2020</Copyright>
     <OutputPath>bin\</OutputPath>
     <LangVersion>latest</LangVersion>
     <DebugType>full</DebugType>

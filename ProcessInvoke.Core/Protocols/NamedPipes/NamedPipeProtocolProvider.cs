@@ -38,35 +38,49 @@ namespace ProcessInvoke.Protocols.NamedPipes
             return ret;
         }
 
+
+        protected virtual void ApplyPipeSecurity(NamedPipeServerStream Server)
+        {
+            try
+            {
+                var Security = new PipeSecurity();
+                var Everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                var AllowEveryone = new PipeAccessRule(Everyone, PipeAccessRights.FullControl, System.Security.AccessControl.AccessControlType.Allow);
+                Security.SetAccessRule(AllowEveryone);
+
+                Server.SetAccessControl(Security);
+
+            }
+            catch (Exception ex)
+            {
+                ex.Ignore();
+            }
+        }
+
+
         public virtual async Task StartListeningAsync(Endpoint Endpoint, CancellationToken Token, Func<Object> GetHandler) {
             var EP = StreamName(Endpoint);
 
-            while (true) {
-                
-                if (!Token.IsCancellationRequested) {
-                    try {
-                        var Security = new PipeSecurity();
-                        {
-                            var Everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                            var AllowEveryone = new PipeAccessRule(Everyone, PipeAccessRights.FullControl, System.Security.AccessControl.AccessControlType.Allow);
-                            Security.SetAccessRule(AllowEveryone);
-                        }
+            while (!Token.IsCancellationRequested) {
+                try {
 
-                        var C = new NamedPipeServerStream(EP, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 0, 0, Security);
+                    var C = new NamedPipeServerStream(EP, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 0, 0);
+
+
+                    while (!Token.IsCancellationRequested)
+                    {
 
                         await C.WaitForConnectionAsync(Token)
                             .DefaultAwait()
                             ;
 
                         _ = Task.Run(() => ProcessConnectionAsync(C, GetHandler));
-                    } catch (TaskCanceledException) {
-
                     }
-                } else {
-                    break;
+
+                } catch (TaskCanceledException) {
+
                 }
             }
-
         }
 
         protected virtual async Task ProcessConnectionAsync(Stream S, Func<Object> GetHandler) {
