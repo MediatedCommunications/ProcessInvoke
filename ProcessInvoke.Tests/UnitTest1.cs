@@ -1,52 +1,33 @@
 ﻿using NUnit.Framework;
-using ProcessInvoke.Hosting.Process;
+using ProcessInvoke.Protocols;
+using ProcessInvoke.Protocols.NamedPipes;
 using System;
 using System.Threading.Tasks;
-
+using System.Windows.Markup;
+using ProcessInvoke.Server;
 
 namespace ProcessInvoke.Tests {
+
     [TestFixture]
-    public class UnitTest1 {
-        [Test]
-        public Task CurrentUser() {
-            return TestInvoke(CurrentUserHostingFactory.Instance);
-        }
+    public class OtherTests {
+      
+         
 
         [Test]
-        public Task HighestAvailable() {
-            return TestInvoke(HighestAvailableHostingFactory.Instance);
-        }
+        public async Task SelfHostingAsync() {
+            var Endpoint = new Endpoint(ProtocolProvider.Default, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
-        [Test]
-        public Task AdministratorUser() {
-            return TestInvoke(AdministratorHostingFactory.Instance);
-        }
+            var Server = new IpcServer(Endpoint, new RemoteObject());
+            await Server.StartHostingAsync();
 
-        private async Task TestInvoke(HostingFactory Invoker) {
-            var Host = await Invoker.StartAsync();
+            var Provider = new NamedPipeProtocolProvider();
+            var Client = await Provider.ConnectAsync<IRemoteObject>(Endpoint);
 
-            var RemoteObject = await Host.HostAsync<IRemoteObject, RemoteObject>();
-            var RemoteProcessID = await RemoteObject.HostingProcessId();
-
-            var MyProcessID = System.Diagnostics.Process.GetCurrentProcess().Id;
-            
-            Assert.AreNotEqual(MyProcessID, RemoteProcessID);
+            await Client.HostingProcessIdAsync();
 
         }
 
-    }
 
-
-    public interface IRemoteObject {
-        Task<int> HostingProcessId();
-    }
-
-    public class RemoteObject : MarshalByRefObject, IRemoteObject {
-        public Task<int> HostingProcessId() {
-            var ret = System.Diagnostics.Process.GetCurrentProcess().Id;
-
-            return Task.FromResult(ret);
-        }
     }
 
 }

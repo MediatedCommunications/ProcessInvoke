@@ -1,8 +1,7 @@
-﻿using ProcessInvoke.Hosting;
+﻿using ProcessInvoke.Server.OutOfProcess;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +10,17 @@ namespace ProcessInvoke.Protocols {
     public static class ProtocolProvider {
         public static string Default { get; private set; } = typeof(Protocols.NamedPipes.NamedPipeProtocolProvider).AssemblyQualifiedName;
 
-        public static IProtocolProvider? GetProvider(string? ProviderName) {
+        public static IProtocolProvider GetProvider(string? ProviderName) {
+            var ret = TryGetProvider(ProviderName);
+
+            if(ret == default) {
+                throw new ArgumentOutOfRangeException(nameof(ProviderName), $@"Unable to find {ProviderName}");
+            }
+
+            return ret;
+        }
+
+        public static IProtocolProvider? TryGetProvider(string? ProviderName) {
             var NewProviderName = Default;
             if (!string.IsNullOrWhiteSpace(ProviderName)) {
                 NewProviderName = ProviderName;
@@ -23,18 +32,7 @@ namespace ProcessInvoke.Protocols {
             return ret;
         }
 
-        public static IProtocolProvider? TryGetProvider(string? ProviderName) {
-            var ret = default(IProtocolProvider);
-            try {
-                ret = GetProvider(ProviderName);
-            } catch { 
-            
-            }
-            
-            return ret;
-        }
-
-        public static async Task<T?> TryConnectAsync<T>(Endpoint? Endpoint, ProcessClientOptions? Options = default) where T : class {
+        public static async Task<T?> TryConnectAsync<T>(Endpoint? Endpoint, OutOfProcessClientOptions? Options = default) where T : class {
             var ret = default(T);
 
             if (Endpoint is { } V1 && TryGetProvider(Endpoint?.Provider) is { } V2) {

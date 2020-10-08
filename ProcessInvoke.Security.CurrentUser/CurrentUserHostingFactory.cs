@@ -1,9 +1,8 @@
-﻿using ProcessInvoke.Hosting.Process;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace ProcessInvoke {
+namespace ProcessInvoke.Server.OutOfProcess {
 
-    public class CurrentUserHostingFactory : HostingFactory {
+    public class CurrentUserHostingFactory : OutOfProcessFactory {
 
         public static CurrentUserHostingFactory Instance { get; private set; } = new CurrentUserHostingFactory();
 

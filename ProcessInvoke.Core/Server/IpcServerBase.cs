@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke.Hosting {
-    public abstract class HostBase {
-        protected Endpoint Options { get; private set; }
+namespace ProcessInvoke.Server {
+    public abstract class IpcServerBase {
+        protected Endpoint Endpoint { get; private set; }
         protected CancellationTokenSource? Source { get; private set; }
 
-        public HostBase(Endpoint Options) {
-            this.Options = Options;
+        public IpcServerBase(Endpoint Endpoint) {
+            this.Endpoint = Endpoint;
         }
 
         public event EventHandler? Stopped;
@@ -36,10 +36,10 @@ namespace ProcessInvoke.Hosting {
             Source = new CancellationTokenSource();
 
             var ret = new Endpoint(
-                Options.Provider,
-                Options.Host,
-                Options.Port,
-                Options.Key
+                Endpoint.Provider,
+                Endpoint.Host,
+                Endpoint.Port,
+                Endpoint.Key
             );
 
             
@@ -59,7 +59,6 @@ namespace ProcessInvoke.Hosting {
 
             
         }
-
 
 
         protected abstract object GetHandler();

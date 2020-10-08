@@ -3,13 +3,28 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke.Hosting.Process {
-    public static class Program {
+namespace ProcessInvoke.Server.OutOfProcess {
+    public class Program {
 
-        public static async Task<int> MainAsync(string[] args) {
+        public static class Default {
+            public static Task<int> MainAsync(string[] args) {
+                var Instance = new Program();
+                return Instance.MainAsync(args);
+            }
+        }
+
+
+        protected virtual OutOfProcessServerOptions ParseOptions(string[] args, out Mono.Options.OptionSet Options) {
+            var ret = new OutOfProcessServerOptions();
+            ret.Parse(args, out Options);
+
+            return ret;
+        }
+
+        public virtual async Task<int> MainAsync(string[] args) {
             var ret = -1;
 
-            var Options = ProcessHostOptions.Parse(args, out var OptionsSet);
+            var Options = ParseOptions(args, out var OptionsSet);
             if (!Options.Valid()) {
                 OptionsSet.WriteOptionDescriptions(System.Console.Out);
             } else {
@@ -21,11 +36,11 @@ namespace ProcessInvoke.Hosting.Process {
             return ret;
         }
 
-        static async Task<int> MainAsync(ProcessHostOptions ProcessOptions) {
+        protected virtual async Task<int> MainAsync(OutOfProcessServerOptions ProcessOptions) {
             var ret = -1;
-            var Host = default(RootObjectHost);
+            var Host = default(IpcServerBase);
             try {
-                Host = new RootObjectHost(ProcessOptions);
+                Host = OutOfProcessIpcServer.Create(ProcessOptions);
 
                 await Host.StartHostingAsync()
                     .DefaultAwait()
@@ -66,8 +81,8 @@ namespace ProcessInvoke.Hosting.Process {
             return ret;
         }
 
-        
-        static Task DelayTask_StopAsync(RootObjectHost Host) {
+
+        protected virtual Task DelayTask_StopAsync(IpcServerBase Host) {
             var CTS = new CancellationTokenSource();
             Host.Stopped += (x, y) => {
                 CTS?.Cancel();
@@ -87,9 +102,9 @@ namespace ProcessInvoke.Hosting.Process {
             return ret;
         }
 
-        
 
-        static Task DelayTask_ParentProcessAsync(int ProcessId) {
+
+        protected virtual Task DelayTask_ParentProcessAsync(int ProcessId) {
             var ret = Task.Run(() => {
                 try {
                     var Parent = System.Diagnostics.Process.GetProcessById(ProcessId);
@@ -104,6 +119,5 @@ namespace ProcessInvoke.Hosting.Process {
 
             return ret;
         }
-
     }
 }

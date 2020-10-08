@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ProcessInvoke.Hosting.Process {
-    public class ProcessHostOptions {
+namespace ProcessInvoke.Server.OutOfProcess {
+
+    public class OutOfProcessServerOptions {
         public string ListenOn_Provider { get; set; } = string.Empty;
         public string ListenOn_Host { get; set; } = string.Empty;
         public string ListenOn_Port { get; set; } = string.Empty;
@@ -23,8 +24,8 @@ namespace ProcessInvoke.Hosting.Process {
             );
         }
 
-        public virtual ProcessHostOptions Clone() {
-            var ret = new ProcessHostOptions() {
+        public virtual OutOfProcessServerOptions Clone() {
+            var ret = new OutOfProcessServerOptions() {
                 ListenOn_Provider = ListenOn_Provider,
                 ListenOn_Host = ListenOn_Host,
                 ListenOn_Port = ListenOn_Port,
@@ -40,7 +41,7 @@ namespace ProcessInvoke.Hosting.Process {
         }
 
 
-        public bool Valid() {
+        public virtual bool Valid() {
             return true
                 && !string.IsNullOrEmpty(ListenOn_Provider)
                 && !string.IsNullOrEmpty(ListenOn_Host)
@@ -74,12 +75,12 @@ namespace ProcessInvoke.Hosting.Process {
             return ret;
         }
 
-        public static ProcessHostOptions Parse(string[] Args) {
-            return Parse(Args, out var _);
+        public void Parse(string[] Args) {
+            Parse(Args, out var _);
         }
 
-        public static ProcessHostOptions Parse(string[] Args, out Mono.Options.OptionSet Options) {
-            var ret = new ProcessHostOptions();
+        public virtual void Parse(string[] Args, out Mono.Options.OptionSet Options) {
+            var ret = this;
 
             Options = new Mono.Options.OptionSet() {
                 "This",
@@ -87,7 +88,7 @@ namespace ProcessInvoke.Hosting.Process {
                 "Another",
                 { $@"{nameof(ParentProcess_ID)}=", "the process ID of the parent process", (int x)=> ret.ParentProcess_ID = x },
                 { $@"{nameof(Terminate_OnParentProcessExit)}=", "if true, will exit when the parent process exits", (bool x)=> ret.Terminate_OnParentProcessExit = x },
-                { $@"{nameof(Terminate_OnStop)}=", "if true, will exit when 'Stop' is invoked", (bool x)=> ret.Terminate_OnParentProcessExit = x },
+                { $@"{nameof(Terminate_OnStop)}=", "if true, will exit when 'Stop' is invoked", (bool x)=> ret.Terminate_OnStop = x },
                 { $@"{nameof(ListenOn_Provider)}=", "the provider to use for listening", (string x)=> ret.ListenOn_Provider = x },
                 { $@"{nameof(ListenOn_Host)}=", "the host to listen on", (string x)=> ret.ListenOn_Host = x },
                 { $@"{nameof(ListenOn_Port)}=", "the port to listen on", (string x)=> ret.ListenOn_Port = x },
@@ -96,7 +97,6 @@ namespace ProcessInvoke.Hosting.Process {
 
             Options.Parse(Args);
 
-            return ret;
         }
 
     }

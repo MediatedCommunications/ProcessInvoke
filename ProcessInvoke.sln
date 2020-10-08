@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Tests", "ProcessInvoke.Tests\ProcessInvoke.Tests.csproj", "{84A914A7-21F4-44E9-A306-D32AC562D126}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessInvoke.Tests", "ProcessInvoke.Tests\ProcessInvoke.Tests.csproj", "{84A914A7-21F4-44E9-A306-D32AC562D126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Core", "ProcessInvoke.Core\ProcessInvoke.Core.csproj", "{5D0A5D75-DA14-496D-97A9-562969C52720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessInvoke.Core", "ProcessInvoke.Core\ProcessInvoke.Core.csproj", "{5D0A5D75-DA14-496D-97A9-562969C52720}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{27568C99-CAE5-489E-879F-21E2AA386C21}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,13 +13,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Security.HighestAvailable", "ProcessInvoke.Security.HighestAvailable\ProcessInvoke.Security.HighestAvailable.csproj", "{625812F8-BEA9-4FF4-8212-18D0969D3828}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessInvoke.Security.HighestAvailable", "ProcessInvoke.Security.HighestAvailable\ProcessInvoke.Security.HighestAvailable.csproj", "{625812F8-BEA9-4FF4-8212-18D0969D3828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Security.CurrentUser", "ProcessInvoke.Security.CurrentUser\ProcessInvoke.Security.CurrentUser.csproj", "{0C36621A-1592-455D-9AF2-D135F843BBB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessInvoke.Security.CurrentUser", "ProcessInvoke.Security.CurrentUser\ProcessInvoke.Security.CurrentUser.csproj", "{0C36621A-1592-455D-9AF2-D135F843BBB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInvoke.Security.Administrator", "ProcessInvoke.Security.Administrator\ProcessInvoke.Security.Administrator.csproj", "{0494A393-1606-46ED-BFF8-600702929D47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessInvoke.Security.Administrator", "ProcessInvoke.Security.Administrator\ProcessInvoke.Security.Administrator.csproj", "{0494A393-1606-46ED-BFF8-600702929D47}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{95F2F17A-F390-4506-86B8-ED0066267B95}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.targets*{0494a393-1606-46ed-bff8-600702929d47}*SharedItemsImports = 5
+		Shared\Shared.targets*{0c36621a-1592-455d-9af2-d135f843bbb1}*SharedItemsImports = 5
+		Shared\Shared.targets*{5d0a5d75-da14-496d-97a9-562969c52720}*SharedItemsImports = 5
+		Shared\Shared.targets*{625812f8-bea9-4ff4-8212-18d0969d3828}*SharedItemsImports = 5
+		Shared\Shared.projitems*{95f2f17a-f390-4506-86b8-ed0066267b95}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

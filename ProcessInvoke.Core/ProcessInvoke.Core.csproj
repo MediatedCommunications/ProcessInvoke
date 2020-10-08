@@ -1,18 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\Shared\Shared.targets" Label="Shared" />
   <PropertyGroup>
-    <RootNamespace>ProcessInvoke</RootNamespace>
-    <TargetFramework>net472</TargetFramework>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <AssemblyTitle>ProcessInvoke</AssemblyTitle>
-    <Product>ProcessInvoke</Product>
-    <Copyright>Copyright © 2020</Copyright>
-    <OutputPath>bin\</OutputPath>
-    <LangVersion>latest</LangVersion>
-    <DebugType>full</DebugType>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
-    <PackageReference Include="StreamJsonRpc" Version="2.4.48" />
+    <PackageReference Include="StreamJsonRpc" Version="2.5.46" />
   </ItemGroup>
+   
+  
 </Project>

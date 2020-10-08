@@ -1,0 +1,28 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ output extension=".g.cs" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+
+<#
+
+	var Date = DateTimeOffset.Now.ToString(System.Globalization.DateTimeFormatInfo.InvariantInfo);
+	 
+	var VersionDate = DateTime.Now.AddDays(0);
+
+    var Version = String.Format("{0:00}.{1:00}.{2:00}", VersionDate.Year % 100, VersionDate.Month, VersionDate.Day);
+
+#>
+
+using System;
+
+    static partial class InternalAssemblyInfo {
+
+		public const string AssemblyBuildDateString = "<#= Date #>" ;
+		public static DateTimeOffset AssemblyBuildDate => DateTimeOffset.Parse(AssemblyBuildDateString, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+
+        public const string Version = "<#= Version #>";
+
+	}

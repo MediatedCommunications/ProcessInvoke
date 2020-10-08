@@ -1,6 +1,6 @@
 ﻿using System.Reflection.Emit;
 
-namespace ProcessInvoke.Hosting {
+namespace ProcessInvoke {
     public class Endpoint {
         public string Provider { get; private set; } = string.Empty;
         public string Host { get; private set; } = string.Empty;
@@ -12,12 +12,6 @@ namespace ProcessInvoke.Hosting {
             this.Host = Host;
             this.Port = Port;
             this.Key = Key;
-        }
-
-
-        public string StreamName() {
-            var ret = $@"{Provider}-{Host}-{Port}-{Key}";
-            return ret;
         }
 
     }

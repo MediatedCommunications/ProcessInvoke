@@ -1,8 +1,7 @@
-﻿using ProcessInvoke.Hosting.Process;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace ProcessInvoke {
-    public class HighestAvailableHostingFactory : HostingFactory {
+namespace ProcessInvoke.Server.OutOfProcess {
+    public class HighestAvailableHostingFactory : OutOfProcessFactory {
         public static HighestAvailableHostingFactory Instance { get; private set; } = new HighestAvailableHostingFactory();
     }
 

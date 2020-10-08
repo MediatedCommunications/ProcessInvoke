@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\Shared\Shared.targets" Label="Shared" />
+  
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <OutputPath>bin\</OutputPath>
-    <LangVersion>latest</LangVersion>
-    <DebugType>full</DebugType>
     <OutputType>WinExe</OutputType>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ProcessInvoke.Core\ProcessInvoke.Core.csproj" />
   </ItemGroup>
+
 </Project>

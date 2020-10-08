@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+  <ItemGroup>
+    <Compile Include="..\Shared\__InternalAssemblyInfo.g.cs">
+      <Visible>False</Visible>
+    </Compile>
+
+    <Compile Include="..\Shared\AssemblyInfo.cs">
+      <Visible>False</Visible>
+    </Compile>
+    
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\</OutputPath>
+    <LangVersion>latest</LangVersion>
+    <nullable>enable</nullable>
+  </PropertyGroup>
+  
+</Project>

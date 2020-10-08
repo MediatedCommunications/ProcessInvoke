@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessInvoke.Hosting.Process {
-    class CurrentProcessProcessHost : HostingFactory {
+namespace ProcessInvoke.Server.OutOfProcess {
+    class CurrentProcessProcessHost : OutOfProcessFactory {
 
         public static CurrentProcessProcessHost Instance { get; private set; } = new CurrentProcessProcessHost();
 

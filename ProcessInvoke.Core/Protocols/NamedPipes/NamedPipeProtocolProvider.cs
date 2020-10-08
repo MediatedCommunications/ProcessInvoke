@@ -1,10 +1,11 @@
-﻿using ProcessInvoke.Hosting;
+﻿using ProcessInvoke.Server.OutOfProcess;
 using StreamJsonRpc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -13,9 +14,16 @@ using System.Threading.Tasks;
 namespace ProcessInvoke.Protocols.NamedPipes
 {
     public class NamedPipeProtocolProvider : IProtocolProvider {
-        public async Task<T> ConnectAsync<T>(Endpoint Endpoint, ProcessClientOptions? Options = default) where T : class {
-            var StreamName = Endpoint.StreamName();
-            var C = new NamedPipeClientStream(".", StreamName, PipeDirection.InOut, PipeOptions.Asynchronous);
+
+        public virtual string StreamName(Endpoint EP) {
+            var ret = $@"{EP.Provider}-{EP.Host}-{EP.Port}-{EP.Key}";
+            return ret;
+        }
+
+
+        public virtual async Task<T> ConnectAsync<T>(Endpoint Endpoint, OutOfProcessClientOptions? Options = default) where T : class {
+            var EP = StreamName(Endpoint);
+            var C = new NamedPipeClientStream(".", EP, PipeDirection.InOut, PipeOptions.Asynchronous);
 
             var Delay = Timeout.Infinite;
             if (Options?.OnConnect_Attempts_TotalTimeOut > TimeSpan.Zero) {
@@ -30,8 +38,8 @@ namespace ProcessInvoke.Protocols.NamedPipes
             return ret;
         }
 
-        public async Task StartListeningAsync(Endpoint Endpoint, CancellationToken Token, Func<Object> GetHandler) {
-            var EP = Endpoint.StreamName();
+        public virtual async Task StartListeningAsync(Endpoint Endpoint, CancellationToken Token, Func<Object> GetHandler) {
+            var EP = StreamName(Endpoint);
 
             while (true) {
                 
@@ -61,8 +69,10 @@ namespace ProcessInvoke.Protocols.NamedPipes
 
         }
 
-        protected async Task ProcessConnectionAsync(Stream S, Func<Object> GetHandler) {
+        protected virtual async Task ProcessConnectionAsync(Stream S, Func<Object> GetHandler) {
+
             var Instance = GetHandler();
+            
             var RPC = JsonRpc.Attach(S, Instance);
             await RPC.Completion
                 .DefaultAwait()
