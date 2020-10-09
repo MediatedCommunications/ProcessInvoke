@@ -15,8 +15,6 @@ namespace ProcessInvoke.Protocols.NamedPipes
 {
     public class NamedPipeProtocolProvider : IProtocolProvider {
 
-        bool Legacy = false;
-
         public virtual string StreamName(Endpoint EP) {
             var ret = $@"{EP.Provider}-{EP.Host}-{EP.Port}-{EP.Key}";
             return ret;
@@ -35,16 +33,10 @@ namespace ProcessInvoke.Protocols.NamedPipes
             await Stream.ConnectAsync(Delay)
                 .DefaultAwait()
                 ;
+            
+            var Handler = CreateMessageHandler(Stream);
 
-            var ret = default(T);
-            if (Legacy) {
-                ret = StreamJsonRpc.JsonRpc.Attach<T>(Stream);
-            } else {
-                var Handler = CreateMessageHandler(Stream);
-
-                ret = JsonRpc.Attach<T>(Handler);
-            }
-
+            var ret = JsonRpc.Attach<T>(Handler);
 
             return ret;
         }
@@ -74,16 +66,10 @@ namespace ProcessInvoke.Protocols.NamedPipes
 
             var Instance = GetHandler();
 
-            var RPC = default(JsonRpc);
+            var Handler = CreateMessageHandler(Stream);
 
-            if (Legacy) {
-                RPC = JsonRpc.Attach(Stream, Instance);
-            } else {
-
-                var Handler = CreateMessageHandler(Stream);
-
-                RPC = new JsonRpc(Handler, Instance);
-            }
+            var RPC = new JsonRpc(Handler, Instance);
+            RPC.StartListening();
 
             await RPC.Completion
                 .DefaultAwait()
