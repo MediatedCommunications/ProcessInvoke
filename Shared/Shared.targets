@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net50-windows</TargetFramework>
+    <TargetFramework>net50</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DebugType>full</DebugType>
     <OutputPath>bin\</OutputPath>

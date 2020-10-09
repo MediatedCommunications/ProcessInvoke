@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace ProcessInvoke.Server.OutOfProcess {
     public class OutOfProcessController : IOutOfProcessController {
-        StoppableIpcServer V3;
-        MultiIpcServer V1;
-        OutOfProcessCloneableIpcServer V2;
+        readonly StoppableIpcServer V3;
+        readonly MultiIpcServer V1;
+        readonly OutOfProcessCloneableIpcServer V2;
 
         public OutOfProcessController(IpcServerBase Server, OutOfProcessServerOptions Options, OutOfProcessFactory? Factory = default) {
             V3 = new StoppableIpcServer(Server);

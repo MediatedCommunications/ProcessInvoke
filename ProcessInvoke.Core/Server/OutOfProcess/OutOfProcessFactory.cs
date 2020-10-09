@@ -44,9 +44,10 @@ namespace ProcessInvoke.Server.OutOfProcess {
                 FileName = FN,
                 UseShellExecute = true,
                 Arguments = Options.ToString(),
+                WindowStyle = ProcessWindowStyle.Hidden,
             };
 
-            var Proc = System.Diagnostics.Process.Start(PSI);
+            System.Diagnostics.Process.Start(PSI);
 
             return Task.CompletedTask;
         }
@@ -57,7 +58,7 @@ namespace ProcessInvoke.Server.OutOfProcess {
                 ListenOn_Host = $@"{Guid.NewGuid()}",
                 ListenOn_Port = $@"{Guid.NewGuid()}",
                 ListenOn_Key = $@"{Guid.NewGuid()}",
-                ParentProcess_ID = System.Diagnostics.Process.GetCurrentProcess().Id,
+                ParentProcess_ID = Environment.ProcessId,
                 Terminate_OnParentProcessExit = true,
                 Terminate_OnStop = true,
             };
@@ -76,14 +77,14 @@ namespace ProcessInvoke.Server.OutOfProcess {
         }
 
         public async Task<IOutOfProcessController> StartAsync(OutOfProcessServerOptions? ServerOptions = default, OutOfProcessClientOptions? ClientOptions = default) {
-            ServerOptions = ServerOptions ?? DefaultServerOptions();
+            ServerOptions ??= DefaultServerOptions();
             ServerOptions = ServerOptions.Clone();
 
-            ClientOptions = ClientOptions ?? DefaultClientOptions();
+            ClientOptions ??= DefaultClientOptions();
             ClientOptions = ClientOptions.Clone();
 
             if (ServerOptions.ParentProcess_ID == null) {
-                ServerOptions.ParentProcess_ID = System.Diagnostics.Process.GetCurrentProcess().Id;
+                ServerOptions.ParentProcess_ID = Environment.ProcessId;
             }
 
             await StartHostAsync(ServerOptions)

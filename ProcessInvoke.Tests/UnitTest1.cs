@@ -20,11 +20,11 @@ namespace ProcessInvoke.Tests {
         public async Task SelfHostingAsync() {
             var Endpoint = new Endpoint(ProtocolProvider.Default, Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
-            var Server = new IpcServer(Endpoint, new RemoteObject());
+            var Server = new IpcServer(Endpoint, new RemoteTestObject());
             await Server.StartHostingAsync();
 
             var Provider = new NamedPipeProtocolProvider();
-            var Client = await Provider.ConnectAsync<IRemoteObject>(Endpoint);
+            var Client = await Provider.ConnectAsync<IRemoteTestObject>(Endpoint);
 
             await Client.HostingProcessIdAsync();
 
@@ -33,18 +33,21 @@ namespace ProcessInvoke.Tests {
         [Test]
         public async Task TestInProcessFactoryAsync()
         {
-            var Type = typeof(RemoteObject).AssemblyQualifiedName;
-
 
             var Host = await InProcessFactory.Instance.StartAsync();
 
-            var RemoteObject = await Host.HostAsync<IRemoteObject, RemoteObject>();
-            var RemoteProcessID = await RemoteObject.HostingProcessIdAsync();
+            var RemoteObject = await Host.HostAsync<IRemoteTestObject, RemoteTestObject>();
 
-            var MyProcessID = System.Diagnostics.Process.GetCurrentProcess().Id;
+            Assert.IsNotNull(RemoteObject);
 
-            Assert.AreEqual(MyProcessID, RemoteProcessID);
+            if (RemoteObject is { }) {
 
+                var RemoteProcessID = await RemoteObject.HostingProcessIdAsync();
+
+                var MyProcessID = Environment.ProcessId;
+
+                Assert.AreEqual(MyProcessID, RemoteProcessID);
+            }
 
 
         }
