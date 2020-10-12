@@ -22,7 +22,7 @@ namespace ProcessInvoke.Server.OutOfProcess {
         }
 
         public virtual async Task<int> MainAsync(string[] args) {
-            LocalPathAssemblyResolver.Instance.Enabled = true;
+            //LocalPathAssemblyResolver.Instance.Enabled = true;
             
             var ret = -1;
 

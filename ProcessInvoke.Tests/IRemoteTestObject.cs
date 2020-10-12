@@ -4,6 +4,7 @@ namespace ProcessInvoke.Tests {
     public interface IRemoteTestObject {
         Task<int> HostingProcessIdAsync();
         Task<BaseResult?> GetValueAsync(ResultType Type);
+        Task<bool> TestReferenceAsync();
     }
 
     public enum ResultType {

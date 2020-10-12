@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ProcessInvoke.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

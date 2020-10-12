@@ -1,7 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.Loader;
 
 namespace System {
     public class AssemblyResolver {
+
+        protected AssemblyLoadContext Context { get; private set; }
+
+        public AssemblyResolver(AssemblyLoadContext Context) {
+            this.Context = Context;
+        }
+
         private bool __Enabled;
         public bool Enabled {
             get {
@@ -10,18 +18,19 @@ namespace System {
             set {
                 if (value != __Enabled) {
                     if (value) {
-                        System.AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+                        Context.Resolving += Context_Resolving;
                     } else {
-                        System.AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+                        Context.Resolving -= Context_Resolving;
                     }
                     __Enabled = value;
                 }
             }
         }
 
-        protected virtual Assembly? CurrentDomain_AssemblyResolve(object? sender, ResolveEventArgs args) {
+        protected virtual Assembly? Context_Resolving(AssemblyLoadContext arg1, AssemblyName arg2) {
             return default;
         }
+
     }
 
 }

@@ -103,6 +103,26 @@ namespace ProcessInvoke.Tests {
         }
 
 
+        [Test]
+        public Task TestReferencesAsync() {
+            return TestReferencesAsync(GetFactory());
+        }
+
+        private static async Task TestReferencesAsync(OutOfProcessFactory Invoker) {
+            var Host = await Invoker.StartAsync();
+
+            var RemoteObject = await Host.HostAsync<IRemoteTestObject, RemoteTestObject>();
+
+            Assert.IsNotNull(RemoteObject);
+
+            if (RemoteObject is { }) {
+
+                var ReferencesWork = await RemoteObject.TestReferenceAsync();
+
+                Assert.IsTrue(ReferencesWork);
+            }
+
+        }
 
     }
 

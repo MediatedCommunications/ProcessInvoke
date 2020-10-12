@@ -2,7 +2,7 @@
   <Import Project="..\Shared\Shared.targets" Label="Shared" />
   
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
 	<!-- No Manifest -->
   </PropertyGroup>
   

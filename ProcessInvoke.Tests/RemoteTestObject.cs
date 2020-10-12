@@ -9,6 +9,20 @@ namespace ProcessInvoke.Tests {
             return Task.FromResult(ret);
         }
 
+        public Task<bool> TestReferenceAsync() {
+            var ret = false;
+            try {
+                if (OperatingSystem.IsWindows()) {
+                    var C = new System.Management.ManagementObjectSearcher();
+                    ret = true;
+                }
+            } catch {
+
+            }
+
+            return Task.FromResult(ret);
+        }
+
         public Task<BaseResult?> GetValueAsync(ResultType Type) {
 
             var ret = Type switch

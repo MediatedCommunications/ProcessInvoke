@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ProcessInvoke.Server.OutOfProcess {
     public interface IMultiIpcServer {
-        Task<Endpoint?> HostEndpointAsync(Type Key);
+        Task<Endpoint?> HostEndpointAsync(string Assembly, string AssemblyQualifiedTypeName);
     }
 
 }

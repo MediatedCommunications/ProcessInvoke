@@ -22,22 +22,21 @@ namespace ProcessInvoke.Server.OutOfProcess {
         }
 
         public static async Task<TInterface?> HostAsync<TInterface, TImplementation>(this IOutOfProcessController This) where TImplementation : TInterface where TInterface : class {
+            var ret = default(TInterface?);
+            
             var Key = typeof(TImplementation);
 
 
-            try
-            {
-                //var Data = (This as StreamJsonRpc.IJsonRpcClientProxy).JsonRpc.InvokeAsync()
+            if (Key.Assembly.Location is { } Location && Key.FullName is { } AssemblyQualifiedName) {
+
+                var EP = await This.HostEndpointAsync(Location, AssemblyQualifiedName)
+                    .DefaultAwait()
+                    ;
+
+                ret = await Protocols.ProtocolProvider.TryConnectAsync<TInterface>(EP)
+                    .DefaultAwait()
+                    ;
             }
-            catch { }
-
-            var EP = await This.HostEndpointAsync(Key)
-                .DefaultAwait()
-                ;
-
-            var ret = await Protocols.ProtocolProvider.TryConnectAsync<TInterface>(EP)
-                .DefaultAwait()
-                ;
 
             return ret;
         }

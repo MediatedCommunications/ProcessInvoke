@@ -17,8 +17,8 @@ namespace ProcessInvoke.Server.OutOfProcess {
             return V2.CloneEndpointAsync();
         }
 
-        public Task<Endpoint?> HostEndpointAsync(Type Key) {
-            return V1.HostEndpointAsync(Key);
+        public Task<Endpoint?> HostEndpointAsync(string Assembly, string AssemblyQualifiedTypeName) {
+            return V1.HostEndpointAsync(Assembly, AssemblyQualifiedTypeName);
         }
 
         public Task StopAsync() {

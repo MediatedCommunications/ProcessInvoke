@@ -73,8 +73,8 @@ namespace ProcessInvoke.Server.OutOfProcess.Restartable {
             return InvokeAsync(x => x.CloneEndpointAsync());
         }
 
-        public Task<Endpoint?> HostEndpointAsync(Type Key) {
-            return InvokeAsync(x => x.HostEndpointAsync(Key));
+        public Task<Endpoint?> HostEndpointAsync(string Assembly, string AssemblyQualifiedTypeName) {
+            return InvokeAsync(x => x.HostEndpointAsync(Assembly, AssemblyQualifiedTypeName));
         }
 
         public Task StopAsync() {
