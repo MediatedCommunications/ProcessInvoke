@@ -11,7 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ProcessInvoke {
-    internal sealed class DependencyAssemblyResolver : AssemblyResolver {
+
+    public class DependencyAssemblyResolver : AssemblyResolver {
         private readonly ICompilationAssemblyResolver Resolver;
         private readonly DependencyContext DependencyContext;
 
@@ -34,31 +35,39 @@ namespace ProcessInvoke {
 
         public Assembly Assembly { get; }
 
-        protected override Assembly? Context_Resolving(AssemblyLoadContext context, AssemblyName name) {
+        protected override Assembly? Context_Resolving(AssemblyLoadContext Context, AssemblyName Name) {
             var ret = default(Assembly?);
 
-            var library = (
-                from x in DependencyContext.RuntimeLibraries
-                where string.Equals(x.Name, name.Name, StringComparison.OrdinalIgnoreCase)
-                select x
-                ).FirstOrDefault();
 
-                
-            if (library is { }) {
-                var wrapper = new CompilationLibrary(
-                    library.Type,
-                    library.Name,
-                    library.Version,
-                    library.Hash,
-                    library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
-                    library.Dependencies,
-                    library.Serviceable);
+            if (DependencyContext?.RuntimeLibraries is { } RuntimeLibraries) {
 
-                var assemblies = new List<string>();
-                this.Resolver.TryResolveAssemblyPaths(wrapper, assemblies);
-                if (assemblies.Count > 0) {
-                    ret = this.Context.LoadFromAssemblyPath(assemblies[0]);
+                var PotentialLibrary = (
+                    from x in RuntimeLibraries
+                    where string.Equals(x.Name, Name.Name, StringComparison.OrdinalIgnoreCase)
+                    select x
+                    ).FirstOrDefault();
+
+
+                if (PotentialLibrary is { } Library) {
+                    var wrapper = new CompilationLibrary(
+                        Library.Type,
+                        Library.Name,
+                        Library.Version,
+                        Library.Hash,
+                        Library.RuntimeAssemblyGroups.SelectMany(g => g.AssetPaths),
+                        Library.Dependencies,
+                        Library.Serviceable);
+
+                    var assemblies = new List<string>();
+                    this.Resolver.TryResolveAssemblyPaths(wrapper, assemblies);
+                    if (assemblies.Count > 0) {
+                        ret = this.Context.LoadFromAssemblyPath(assemblies[0]);
+                    }
                 }
+            }
+
+            if (ret == default) {
+ 
             }
 
             return ret;

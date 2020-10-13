@@ -40,11 +40,16 @@ namespace ProcessInvoke.Server.OutOfProcess {
         protected virtual Task StartHostAsync(OutOfProcessServerOptions Options) {
             var FN = FileNameToLaunch();
 
+            var WindowStyle = Debugger.IsAttached
+                ? ProcessWindowStyle.Normal
+                : ProcessWindowStyle.Hidden
+                ;
+
             var PSI = new System.Diagnostics.ProcessStartInfo() {
                 FileName = FN,
                 UseShellExecute = true,
                 Arguments = Options.ToString(),
-                WindowStyle = ProcessWindowStyle.Hidden,
+                WindowStyle = WindowStyle,
             };
 
             System.Diagnostics.Process.Start(PSI);

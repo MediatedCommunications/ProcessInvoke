@@ -27,7 +27,7 @@ namespace System {
             }
         }
 
-        protected virtual Assembly? Context_Resolving(AssemblyLoadContext arg1, AssemblyName arg2) {
+        protected virtual Assembly? Context_Resolving(AssemblyLoadContext Context, AssemblyName Name) {
             return default;
         }
 
