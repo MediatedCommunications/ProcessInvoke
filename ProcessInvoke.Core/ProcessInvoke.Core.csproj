@@ -4,8 +4,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Mono.Options" Version="6.6.0.161" />
-    <PackageReference Include="StreamJsonRpc" Version="2.5.46" />
+    <PackageReference Include="Mono.Options" Version="6.12.0.148" />
+    <PackageReference Include="StreamJsonRpc" Version="2.12.27" />
   </ItemGroup>
    
   
