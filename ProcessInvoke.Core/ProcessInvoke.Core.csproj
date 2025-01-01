@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
-    <PackageReference Include="StreamJsonRpc" Version="2.12.27" />
+    <PackageReference Include="StreamJsonRpc" Version="2.20.20" />
   </ItemGroup>
    
   
